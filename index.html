@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoteTrack - Election Tracker & Voting</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="vote.css">
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="background">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+        <div class="circle circle-4"></div>
+    </div>
+
+    <!-- Voting Modal -->
+    <div id="voting-modal" class="modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h2><i class="fas fa-vote-yea"></i> Cast Your Vote</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+    <div id="voter-id-section" class="voter-id-section">
+        <div class="form-group">
+            <label for="voter-id"><i class="fas fa-id-card"></i> Voter ID Number</label>
+            <input type="text" id="voter-id" placeholder="Enter your 12-digit Voter ID" maxlength="12">
+            <div class="hint">Format: ABC123456789</div>
+        </div>
+        <button id="verify-voter" class="btn-verify">
+            <i class="fas fa-check-circle"></i> Verify Voter ID
+        </button>
+    </div>
+
+    <div id="voting-section" class="voting-section" style="display: none;">
+        <!-- Rest of voting section -->
+    </div>
+</div>
+
+                <div class="voting-section" id="voting-section" style="display: none;">
+                    <h3><i class="fas fa-user-check"></i> Verified Voter: <span id="voter-name">John Doe</span></h3>
+                    <p class="voter-info">Select your preferred candidate and confirm your vote.</p>
+                    
+                    <div class="candidates-voting">
+                        <!-- Voting candidates will be loaded here -->
+                    </div>
+                    
+                    <div class="confirmation-section">
+                        <div class="form-group">
+                            <label for="voter-pin"><i class="fas fa-lock"></i> Security PIN</label>
+                            <input type="password" id="voter-pin" placeholder="Enter 6-digit PIN" maxlength="6">
+                            <div class="hint">Created during voter registration</div>
+                        </div>
+                        
+                        <div class="vote-confirm">
+                            <div class="selected-candidate-info" id="selected-candidate-info">
+                                No candidate selected
+                            </div>
+                            <button id="submit-vote" class="btn-vote" disabled>
+                                <i class="fas fa-paper-plane"></i> Submit Vote
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="verification-success" id="verification-success" style="display: none;">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Verification Successful!</h3>
+                    <p>You can now proceed to vote.</p>
+                </div>
+
+                <div class="voting-success" id="voting-success" style="display: none;">
+                    <div class="success-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Vote Submitted Successfully!</h3>
+                    <p>Thank you for participating in the democratic process.</p>
+                    <div class="receipt">
+                        <p><strong>Transaction ID:</strong> <span id="receipt-id">VTX-2024-XXXXXX</span></p>
+                        <p><strong>Time:</strong> <span id="receipt-time">14:30:45</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="glass-header">
+            <div class="logo">
+                <i class="fas fa-vote-yea"></i>
+                <h1>VoteTrack</h1>
+            </div>
+            <div class="header-controls">
+                <button id="vote-now-btn" class="btn-vote-now">
+                    <i class="fas fa-vote-yea"></i> Vote Now
+                </button>
+                <div class="header-info">
+                    <div class="live-badge">
+                        <span class="live-dot"></span>
+                        LIVE RESULTS
+                    </div>
+                    <div class="last-update">
+                        Updated: <span id="update-time">Just now</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <main class="dashboard">
+            <!-- Left Column -->
+            <div class="column left-column">
+                <!-- Election Overview Card -->
+                <div class="glass-card overview">
+                    <h2 class="card-title">
+                        <i class="fas fa-chart-bar"></i>
+                        Election Overview
+                    </h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="total-votes">8,425,691</div>
+                            <div class="stat-label">Total Votes Cast</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="turnout">67.8%</div>
+                            <div class="stat-label">Voter Turnout</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="precincts-reporting">94%</div>
+                            <div class="stat-label">Precincts Reporting</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="online-votes">124,589</div>
+                            <div class="stat-label">Online Votes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Voting Statistics -->
+                <div class="glass-card voting-stats">
+                    <h2 class="card-title">
+                        <i class="fas fa-chart-pie"></i>
+                        Voting Statistics
+                    </h2>
+                    <div class="stats-container">
+                        <div class="voting-method">
+                            <h4>Voting Methods</h4>
+                            <div class="method-stats">
+                                <div class="method">
+                                    <span class="method-name">Online</span>
+                                    <div class="method-bar">
+                                        <div class="method-fill" style="width: 25%"></div>
+                                    </div>
+                                    <span class="method-percent">25%</span>
+                                </div>
+                                <div class="method">
+                                    <span class="method-name">In-Person</span>
+                                    <div class="method-bar">
+                                        <div class="method-fill" style="width: 60%"></div>
+                                    </div>
+                                    <span class="method-percent">60%</span>
+                                </div>
+                                <div class="method">
+                                    <span class="method-name">Mail</span>
+                                    <div class="method-bar">
+                                        <div class="method-fill" style="width: 15%"></div>
+                                    </div>
+                                    <span class="method-percent">15%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="voting-progress">
+                            <h4>Today's Goal</h4>
+                            <div class="progress-circle">
+                                <svg width="100" height="100">
+                                    <circle class="progress-bg" cx="50" cy="50" r="40"></circle>
+                                    <circle class="progress-fill" cx="50" cy="50" r="40"></circle>
+                                </svg>
+                                <div class="progress-text">78%</div>
+                            </div>
+                            <p class="goal-info">78% of daily voting goal achieved</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Candidate Progress -->
+                <div class="glass-card candidates">
+                    <h2 class="card-title">
+                        <i class="fas fa-users"></i>
+                        Candidate Progress
+                    </h2>
+                    <div class="candidates-list" id="candidates-list">
+                        <!-- Candidate items will be generated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="column right-column">
+                <!-- Voting Instructions -->
+                <div class="glass-card instructions">
+                    <h2 class="card-title">
+                        <i class="fas fa-info-circle"></i>
+                        How to Vote Online
+                    </h2>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Verify Your Identity</h4>
+                                <p>Enter your Voter ID number to verify your eligibility</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Select Candidate</h4>
+                                <p>Review candidates and select your preferred choice</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Confirm & Submit</h4>
+                                <p>Enter your security PIN and submit your vote</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Get Confirmation</h4>
+                                <p>Receive instant confirmation with transaction ID</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="voting-timer">
+                        <i class="fas fa-clock"></i>
+                        <span>Online voting closes in: </span>
+                        <strong id="voting-timer">23:45:12</strong>
+                    </div>
+                </div>
+
+                <!-- Live Results Map -->
+                <div class="glass-card map-section">
+                    <h2 class="card-title">
+                        <i class="fas fa-map-marked-alt"></i>
+                        Live Results Map
+                    </h2>
+                    <div class="map-container">
+                        <div class="state-map">
+                            <!-- State map visualization -->
+                            <div class="state" data-state="CA" data-party="democrat">CA</div>
+                            <div class="state" data-state="TX" data-party="republican">TX</div>
+                            <div class="state" data-state="NY" data-party="democrat">NY</div>
+                            <div class="state" data-state="FL" data-party="republican">FL</div>
+                            <div class="state" data-state="PA" data-party="tossup">PA</div>
+                            <div class="state" data-state="OH" data-party="republican">OH</div>
+                            <div class="state" data-state="IL" data-party="democrat">IL</div>
+                            <div class="state" data-state="MI" data-party="tossup">MI</div>
+                        </div>
+                        <div class="map-legend">
+                            <div class="legend-item">
+                                <span class="legend-color democrat"></span>
+                                <span>Democrat Leading</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color republican"></span>
+                                <span>Republican Leading</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color tossup"></span>
+                                <span>Toss Up</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Votes -->
+                <div class="glass-card recent-votes">
+                    <h2 class="card-title">
+                        <i class="fas fa-history"></i>
+                        Recent Votes
+                    </h2>
+                    <div class="votes-list" id="votes-list">
+                        <!-- Recent votes will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="glass-footer">
+            <div class="footer-content">
+                <div class="security-info">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Secure Voting • Encrypted Transmission • Blockchain Verified</span>
+                </div>
+                <div class="footer-controls">
+                    <button id="refresh-btn" class="btn-refresh">
+                        <i class="fas fa-sync-alt"></i>
+                        Refresh Data
+                    </button>
+                    <div class="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                        <label class="switch">
+                            <input type="checkbox" id="theme-toggle">
+                            <span class="slider"></span>
+                        </label>
+                        <i class="fas fa-sun"></i>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

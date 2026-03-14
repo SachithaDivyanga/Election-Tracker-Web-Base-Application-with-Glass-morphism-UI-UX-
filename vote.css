@@ -1,0 +1,645 @@
+/* Voting Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.modal-header h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 1.5rem;
+}
+
+.modal-header h2 i {
+    color: var(--primary-color);
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+/* Voter ID Section */
+.voter-id-section {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: flex-end;
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-group {
+    flex: 1;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(74, 107, 255, 0.2);
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.hint {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+/* Buttons */
+.btn-verify, .btn-vote, .btn-vote-now {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: var(--transition);
+    font-size: 0.95rem;
+}
+
+.btn-verify {
+    background: var(--primary-color);
+    color: white;
+    height: fit-content;
+}
+
+.btn-verify:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.btn-vote {
+    background: var(--success-color);
+    color: white;
+}
+
+.btn-vote:hover:not(:disabled) {
+    background: #2db287;
+    transform: translateY(-2px);
+}
+
+.btn-vote:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-vote-now {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+}
+
+.btn-vote-now:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(74, 107, 255, 0.3);
+}
+
+/* Voting Section */
+.voting-section h3 {
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.voter-info {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Voting Candidates */
+.candidates-voting {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.voting-candidate {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid transparent;
+    border-radius: 15px;
+    padding: var(--spacing-md);
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.voting-candidate:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-5px);
+}
+
+.voting-candidate.selected {
+    border-color: var(--success-color);
+    background: rgba(36, 211, 153, 0.1);
+}
+
+.voting-candidate.selected::before {
+    content: '✓';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    background: var(--success-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+.candidate-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+.candidate-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.candidate-details h4 {
+    margin-bottom: 4px;
+    font-size: 1.1rem;
+}
+
+.candidate-details p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.candidate-platform {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Confirmation Section */
+.confirmation-section {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: var(--spacing-lg);
+}
+
+.vote-confirm {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--glass-border);
+}
+
+.selected-candidate-info {
+    flex: 1;
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+/* Success Sections */
+.verification-success, .voting-success {
+    text-align: center;
+    padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--success-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-lg);
+    font-size: 2.5rem;
+    color: white;
+}
+
+.verification-success h3, .voting-success h3 {
+    margin-bottom: var(--spacing-sm);
+    color: var(--success-color);
+}
+
+.receipt {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+    text-align: left;
+}
+
+.receipt p {
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.receipt strong {
+    color: var(--text-primary);
+}
+
+/* Header Controls */
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+/* Voting Statistics Card */
+.voting-stats .stats-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+    .voting-stats .stats-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.voting-method h4, .voting-progress h4 {
+    margin-bottom: var(--spacing-md);
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.method {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.method-name {
+    width: 80px;
+    font-size: 0.9rem;
+}
+
+.method-bar {
+    flex: 1;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.method-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--primary-color);
+}
+
+.method-percent {
+    width: 40px;
+    text-align: right;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Progress Circle */
+.progress-circle {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto var(--spacing-sm);
+}
+
+.progress-circle svg {
+    transform: rotate(-90deg);
+}
+
+.progress-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 8;
+}
+
+.progress-fill {
+    fill: none;
+    stroke: var(--success-color);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 251.2;
+    stroke-dashoffset: calc(251.2 * (1 - 0.78));
+    transition: stroke-dashoffset 1s ease;
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--success-color);
+}
+
+.goal-info {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Voting Instructions */
+.steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    transition: var(--transition);
+}
+
+.step:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.step-number {
+    width: 30px;
+    height: 30px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.step-content h4 {
+    margin-bottom: 4px;
+    font-size: 1rem;
+}
+
+.step-content p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.voting-timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: rgba(255, 107, 107, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 107, 107, 0.2);
+}
+
+.voting-timer i {
+    color: var(--danger-color);
+}
+
+#voting-timer {
+    color: var(--danger-color);
+    font-family: monospace;
+    font-size: 1.2rem;
+}
+
+/* Recent Votes */
+.votes-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.vote-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.vote-time {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.vote-candidate {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.candidate-badge {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: white;
+}
+
+/* Footer Security Info */
+.security-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.security-info i {
+    color: var(--success-color);
+}
+
+/* Responsive Design for Modal */
+@media (max-width: 768px) {
+    .voter-id-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .vote-confirm {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+    
+    .selected-candidate-info {
+        width: 100%;
+    }
+    
+    .candidates-voting {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 10px;
+    }
+}
+
+/* Notification Styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10000;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: slideIn 0.3s ease;
+    max-width: 400px;
+}
+
+.notification-success {
+    background: rgba(36, 211, 153, 0.9);
+    color: white;
+}
+
+.notification-error {
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-left: auto;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.3s;
+}
+
+.notification-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
